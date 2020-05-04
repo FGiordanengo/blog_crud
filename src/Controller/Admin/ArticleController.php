@@ -8,6 +8,7 @@ use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  
 /**
@@ -31,7 +32,7 @@ class ArticleController extends AbstractController
      * @Route("/ajouter", name="new")
      * @Route("/{id}/modifier", name="edit")
      */
-    public function form(Request $request, EntityManagerInterface $manager, Article $article = null) 
+    public function form(Request $request, EntityManagerInterface $manager, UploadableManager $uploadableManager, Article $article = null) 
     {
         if(!$article) {
             $article = new Article();
@@ -43,6 +44,10 @@ class ArticleController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             if(!$article->getId()) {
                 $article->setCreatedAt(new \DateTime());
+            }
+
+            if($article->getFile()) {
+                $uploadableManager->markEntityToUpload($article, $article->getFile());
             }
             
             $manager->persist($article);

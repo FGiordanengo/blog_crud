@@ -28,6 +28,8 @@ class AppFixtures extends Fixture
                     ->setTitle($faker->sentence)
                     ->setContent($faker->paragraph(6))
                     ->setImage($faker->imageUrl())
+                    ->setSlug($faker->sentence)
+                    ->setIsActive($faker->boolean)
                     ->setCreatedAt($faker->dateTimeBetween("-6 months"));
             
             $category = $this->getReference('category'.mt_rand(1,3));

@@ -3,12 +3,17 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @UniqueEntity("slug")
+ * @Gedmo\Uploadable(path="upload/article", filenameGenerator="SHA1", allowOverwrite=false)
  */
 class Article
 {
@@ -33,6 +38,7 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Gedmo\UploadableFilePath
      */
     private $image;
 
@@ -51,6 +57,29 @@ class Article
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", orphanRemoval=true)
      */
     private $comment;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Gedmo\Slug(fields={"title"})
+     */
+    private $slug;
+
+    /**
+     * @Assert\Image(
+     *      maxSize="2M",
+     *      maxSizeMessage="Votre fichier doit faire moins de {{ limit }}",
+     *      mimeTypes={"image/jpeg", "image/png"},
+     *      mimeTypesMessage="Le fichier doit être un JPG ou PNG",
+     *      notFoundMessage="Le fichier n'a pas été trouvé",
+     *      uploadErrorMessage="Erreur lors du téléchargement de l'image"
+     * )
+     */
+    private $file;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
 
     public function __construct()
     {
@@ -149,6 +178,50 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get maxSize="2M"
+     */ 
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * Set maxSize="2M"
+     *
+     * @return  self
+     */ 
+    public function setFile(File $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }

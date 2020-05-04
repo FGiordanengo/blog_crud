@@ -8,7 +8,8 @@
     {{ form_row(formArticle.title, {'attr': {'placeholder': "Titre de l'article"}}) }}
     {{ form_row(formArticle.category) }}
     {{ form_row(formArticle.content, {'attr': {'placeholder': "Contenu de l'article"}}) }}
-    {{ form_row(formArticle.image, {'attr': {'placeholder': "Image de l'article"}}) }}
+    {{ form_row(formArticle.file, {'attr': {'placeholder': "Image de l'article"}}) }}
+    {{ form_row(formArticle.isActive) }}
 
 
     <button type="submit" class="btn btn-primary">

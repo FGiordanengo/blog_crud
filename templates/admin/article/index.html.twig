@@ -8,7 +8,7 @@
     {% for article in articles %}
     <article>
         <h2>{{ article.title }}</h2>
-        <div class="metadata">Ecrit le 10//10/19 dans la catégorie {{article.category.title}} </div>
+        <div class="metadata">Ecrit le {{article.createdAt | date('d-m-Y')}} dans la catégorie {{article.category.title}} </div>
         <div class="content">
             <img src="{{ article.image }}" alt="">
             <p>{{article.content}}</p>
