@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +28,7 @@ class BlogController extends AbstractController
      * @Route("/article/new", name="article_new")
      * @Route("/article/{id}/edit", name="article_edit")
      */
-    public function form(Article $article = null, Request $request, ObjectManager $manager) 
+    public function form(Article $article = null, Request $request, EntityManagerInterface  $manager) 
     {
         if(!$article) {
             $article = new Article();
@@ -69,7 +69,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/article/delete/{id}", name="article_delete")
      */
-    public function delete(Article $article, ObjectManager $manager)
+    public function delete(Article $article, EntityManagerInterface $manager)
     {
         $manager->remove($article);
         $manager->flush();
