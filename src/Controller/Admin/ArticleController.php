@@ -36,6 +36,7 @@ class ArticleController extends AbstractController
     {
         if(!$article) {
             $article = new Article();
+            $msg = "L'article a bien été ajouté";
         }
  
         $form = $this->createForm(ArticleType::class, $article);
@@ -52,6 +53,12 @@ class ArticleController extends AbstractController
             
             $manager->persist($article);
             $manager->flush();
+
+            if(!isset($msg)) {
+                $msg = "L'article a bien été modifié";
+            }
+
+            $this->addFlash('success', $msg);
  
             return $this->redirectToRoute('admin_article_show', ['id' => $article->getId()]);
         }
