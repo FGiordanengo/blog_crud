@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Admin;
 
 use App\Entity\Article;
 use App\Entity\Category;
@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArticleType extends AbstractType
 {
@@ -17,9 +18,13 @@ class ArticleType extends AbstractType
             ->add('title')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'title'
+                'choice_label' => 'title',
+                'placeholder' => 'Choisir une catégorie',
+                'label' => 'form.category', //Ici form.category est défini pour l'exemple, on pourrait utiliser directement Category dans messages.fr.yaml
             ])
-            ->add('content')
+            ->add('content', TextareaType::class, [
+                'label' => 'form.category'
+            ])
             ->add('image')
         ;
     }

@@ -12,7 +12,7 @@
         <div class="content">
             <img src="{{ article.image }}" alt="">
             <p>{{article.content}}</p>
-             <a href="{{ path('article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
+             <a href="{{ path('admin_article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
         </div>
     </article>
     <hr>

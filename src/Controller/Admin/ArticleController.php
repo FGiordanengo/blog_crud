@@ -1,42 +1,45 @@
 <?php
-
-namespace App\Controller;
-
+ 
+namespace App\Controller\Admin;
+ 
 use App\Entity\Article;
-use App\Form\ArticleType;
+use App\Form\Admin\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-class BlogController extends AbstractController
+ 
+/**
+ * @Route("/admin", name ="admin_article_")
+ */
+class ArticleController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/", name="index")
      */
     public function index(ArticleRepository $repo)
     {
         $articles = $repo->findAll();
-
-        return $this->render('blog/index.html.twig', [
+ 
+        return $this->render('admin/article/index.html.twig', [
             'articles' => $articles,
         ]);
     }
-
+ 
     /**
-     * @Route("/article/new", name="article_new")
-     * @Route("/article/{id}/edit", name="article_edit")
+     * @Route("/ajouter", name="new")
+     * @Route("/{id}/modifier", name="edit")
      */
-    public function form(Article $article = null, Request $request, EntityManagerInterface  $manager) 
+    public function form(Request $request, EntityManagerInterface $manager, Article $article = null) 
     {
         if(!$article) {
             $article = new Article();
         }
-
+ 
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
+ 
         if($form->isSubmitted() && $form->isValid()) {
             if(!$article->getId()) {
                 $article->setCreatedAt(new \DateTime());
@@ -44,36 +47,35 @@ class BlogController extends AbstractController
             
             $manager->persist($article);
             $manager->flush();
-
-            return $this->redirectToRoute('article_show', ['id' => $article->getId()]);
+ 
+            return $this->redirectToRoute('admin_article_show', ['id' => $article->getId()]);
         }
-
-        return $this->render('blog/create.html.twig', [
+ 
+        return $this->render('admin/article/create.html.twig', [
             'formArticle' => $form->createView(),
             'editMode' => $article->getId() !== null
         ]);
     }
-
-
+ 
     /**
-     * @Route("/article/{id}", name="article_show")
+     * @Route("/{id}", name="show")
      */
     public function show(Article $article)
     {
         
-        return $this->render('blog/show.html.twig', [
+        return $this->render('admin/article/show.html.twig', [
             'article' => $article,
         ]);
     }
-
+ 
     /**
-     * @Route("/article/delete/{id}", name="article_delete")
+     * @Route("/delete/{id}", name="delete")
      */
     public function delete(Article $article, EntityManagerInterface $manager)
     {
         $manager->remove($article);
         $manager->flush();
-
-        return $this->redirectToRoute("home");
+ 
+        return $this->redirectToRoute("admin_article_index");
     }
 }
