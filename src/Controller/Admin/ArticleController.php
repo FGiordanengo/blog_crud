@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Form\Admin\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
@@ -19,9 +20,13 @@ class ArticleController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(ArticleRepository $repo)
+    public function index(ArticleRepository $repo, Request $request, PaginatorInterface $paginator)
     {
-        $articles = $repo->findAll();
+        $articles = $paginator->paginate(
+            $repo->findAll(),
+            $request->query->get('page', 1),
+            10
+        );
  
         return $this->render('admin/article/index.html.twig', [
             'articles' => $articles,

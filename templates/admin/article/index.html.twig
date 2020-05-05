@@ -1,22 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
 {% block title %}Mon blog{% endblock %}
 
-{% block body %}
-<h1>Nos articles</h1>
-<section class="articles">
-    {% for article in articles %}
-    <article>
-        <h2>{{ article.title }}</h2>
-        <div class="metadata">Ecrit le {{article.createdAt | date('d-m-Y')}} dans la catégorie {{article.category.title}} </div>
-        <div class="content">
-            <img src="{{ article.image }}" alt="">
-            <p>{{article.content}}</p>
-             <a href="{{ path('admin_article_show', {'id': article.id}) }}" class="btn btn-primary">Lire la suite</a>
-        </div>
-    </article>
-    <hr>
-    {% endfor %}
-</section>
+{% block content %}
+    <h1>Liste des articles</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Catégorie</th>
+                <th>Contenu</th>
+                <th>Date de création</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.category.title }}</td>
+                <td>{{ article.content}}</td>
+                <td>{{ article.createdAt | date('d-m-Y') }}</td>
+                <td>{{ article.isActive ? 'Publié' : 'Brouillon' }}</td>
+                <td>
+                    <a href="{{ path('admin_article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('admin_article_edit', {'id': article.id}) }}" class="btn btn-secondary">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun article</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(articles)}}
 
 {% endblock %}

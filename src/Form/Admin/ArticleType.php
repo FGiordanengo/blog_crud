@@ -5,6 +5,7 @@ namespace App\Form\Admin;
 use App\Entity\Article;
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,9 +26,11 @@ class ArticleType extends AbstractType
                 'label' => 'form.category', //Ici form.category est défini pour l'exemple, on pourrait utiliser directement Category dans messages.fr.yaml
             ])
             ->add('content', TextareaType::class, [
-                'label' => 'form.category'
+                'label' => 'form.content'
             ])
-            ->add('file', FileType::class)
+            ->add('file', FileType::class, [
+                'required' => is_null($builder->getData()->getId()),
+            ])
             ->add('isActive', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Public ?'
@@ -39,6 +42,13 @@ class ArticleType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Article::class,
+            'validation_groups' => function(FormInterface $form) {
+
+                if ($form->getData()->getId() === null) {
+                    return ['Default', 'create']; 
+                } 
+                return ['Default'];
+            }
         ]);
     }
 }
