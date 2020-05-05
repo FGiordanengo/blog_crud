@@ -16,7 +16,7 @@
                 <nav>
                     <ul class="list-unstyled">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">Article</a>
+                            <a href="{{path('admin_article_index')}}" class="nav-link {{'article' in app.request.attributes.get("_route") ? 'text-danger'}}">Article</a>
                         </li>
                     </ul>
                 </nav>

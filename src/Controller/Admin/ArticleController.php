@@ -13,7 +13,7 @@ use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  
 /**
- * @Route("/admin", name ="admin_article_")
+ * @Route("/admin/article", name ="admin_article_")
  */
 class ArticleController extends AbstractController
 {
