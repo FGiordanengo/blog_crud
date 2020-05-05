@@ -1,0 +1,14 @@
+{% extends "site/blog/layout.html.twig" %}
+
+{% block title %}Les actualités{% endblock %}
+
+{% block blogContent %}
+    <h1>Les actualités</h1>
+
+    {% for article in articles %}
+        {% include "site/blog/_card.html.twig" %}
+    {% else %}
+        <h2>Aucun article</h2>
+    {% endfor %}
+    {{ knp_pagination_render(articles)}}
+{% endblock %}

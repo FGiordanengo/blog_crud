@@ -1,0 +1,15 @@
+{% extends "site/blog/layout.html.twig" %}
+
+{% block title %}{{category.title}}{% endblock %}
+
+{% block blogContent %}
+    <h1>{{ category.title }}</h1>
+    <p>{{ category.description }}</p>
+
+    {% for article in articles %}
+        {% include "site/blog/_card.html.twig" %}
+    {% else %}
+        <h2>Aucun article</h2>
+    {% endfor %}
+    {{ knp_pagination_render(articles)}}
+{% endblock %}

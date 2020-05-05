@@ -36,15 +36,19 @@ class CategoryRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Category
+    
+    public function detailedCategory($slug): ?Category
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->addSelect('a')
+            ->andWhere('c.slug = :val')
+            ->leftJoin('c.articles', 'a')
+            ->andWhere('a.isActive = true')
+            ->orderBy('a.createdAt', 'DESC')
+            ->setParameter('val', $slug)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+    
 }

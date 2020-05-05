@@ -8,6 +8,7 @@ use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -75,7 +76,7 @@ class ArticleController extends AbstractController
     }
  
     /**
-     * @Route("/{id}", name="show")
+     * @Route("/{id}", name="show", methods={"GET"})
      */
     public function show(Article $article)
     {
@@ -86,13 +87,18 @@ class ArticleController extends AbstractController
     }
  
     /**
-     * @Route("/delete/{id}", name="delete")
+     * @Route("/delete/{id}", name="delete", methods={"DELETE"})
      */
-    public function delete(Article $article, EntityManagerInterface $manager)
+    public function delete(Request $request, Article $article): Response
     {
-        $manager->remove($article);
-        $manager->flush();
- 
-        return $this->redirectToRoute("admin_article_index");
+        if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($article);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'L\'article a été supprimée');
+        }
+
+        return $this->redirectToRoute('admin_article_index');
     }
 }
