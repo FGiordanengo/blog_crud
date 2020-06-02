@@ -4,6 +4,6 @@
         <h2 class="card-title">{{article.title}}</h2>
         <p>{{ article.createdAt | date('d-m-Y H:i')}} - <a href=" {{ path('site_blog_category', {'slug': article.category.slug })}} " class="badge badge-primary"> {{article.category.title}} </a></p>
         <p class="card-text"> {{article.content}} </p>
-        <a href="" class="btn btn-primary">Lire la suite</a>
+        <a href=" {{ path('site_blog_show', {'slug': article.slug } )}} " class="btn btn-primary">Lire la suite</a>
     </div>
 </div>

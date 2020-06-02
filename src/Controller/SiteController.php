@@ -71,4 +71,25 @@ class SiteController extends AbstractController
             'category' => $category
         ]);
     }
+
+    /**
+     * @Route("/blog/{slug}", name="blog_show")
+     */
+    public function blogShow(ArticleRepository $articleRepository, $slug) : Response
+    {
+        $article = $articleRepository->detailedArticle($slug);
+        if(!$article) {
+            throw $this->createNotFoundException('Article introuvable');   
+        }
+
+        return $this->render('site/blog/show.html.twig',[
+            'article' => $article
+        ]);
+    }
+
+    public function getSidebar (CategoryRepository $categoryRepository) {
+        return $this->render('site/blog/_sidebar.html.twig',[
+            'categories' => $categoryRepository->listCategories()
+        ]);
+    }
 }

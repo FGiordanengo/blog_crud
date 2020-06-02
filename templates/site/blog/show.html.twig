@@ -1,0 +1,10 @@
+{% extends "site/blog/layout.html.twig" %}
+
+{% block title %}{{article.title}}{% endblock %}
+
+{% block blogContent %}
+    <img src=" {{asset(article.image)}} " alt="{{article.title}}">
+    <h1>{{article.title}}</h1>
+    <p>Article écrit le {{article.createdAt | date('d-m-Y H:i')}}<a href=" {{ path('site_blog_category', {'slug': article.category.slug })}} " class="badge badge-primary"> {{article.category.title}} </a></p>
+    <p>{{article.content}}</p>
+{% endblock %}

@@ -10,6 +10,8 @@
             </div>
             <div class="col-lg-4 offset-lg-1">
                 <h2>Sidebar</h2>
+
+                {{ render(controller('App\\Controller\\SiteController::getSidebar')) }}
             </div>
         </div>
     </div>

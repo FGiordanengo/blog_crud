@@ -1,0 +1,11 @@
+<h3>Liste des catégories</h3>
+<ul class="list-group">
+    {% for category in categories %}
+        <li class="list-group-item">
+            <a href=" {{path('site_blog_category', {'slug' : category.slug}) }} ">
+                {{ category.title }} <span class="badge badge-primary"> {{ category.nb }} </span>
+            </a>
+        </li>
+        
+    {% endfor %}
+</ul>
