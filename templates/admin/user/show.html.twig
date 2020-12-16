@@ -1,0 +1,30 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+    <h1>{{ user.username }}</h1>
+    <p>Email : {{ user.email }}</p>
+    <p>Inscrit le {{ user.registerAt|date('d-m-Y H:i:s') }}</p>
+    <p>Compte vérifié : {{ user.isVerified ? 'Oui' : 'Non' }}</p>
+    <h2>Rôles</h2>
+    <ul class="list-unstyled d-flex">
+        {% for role in user.roles %}
+            <li class="px-1"><span class="badge badge-primary"> {{ role }} </span></li> 
+        {% else %}
+            <li>Le compte est suspendu</li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        <a href="{{ path('admin_user_index') }}" class="btn btn-link">Retour à la liste</a>
+    </p>
+    {% if user.id != app.user.id %}
+        
+    <p>
+        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-outline-primary">Modifier</a>
+    </p>
+
+    {{ include('admin/user/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}

@@ -1,11 +1,16 @@
 {% extends "base.html.twig" %}
  
-{% block body %}
+ {% block mainCss %}
+    {{ encore_entry_link_tags('admin')}}
+    {% block stylesheets %}{% endblock %}
+ {% endblock %}
+
+{% block body %} 
  
     <header class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between">
             <p class="text-light h3">Lorem ipsum</p>
-            <a href="#" class="text-light">Retour au site</a>
+            <a href="{{path('site_index')}}" class="text-light">Retour au site</a>
         </div>
     </header>
  
@@ -21,6 +26,15 @@
                         <li class="nav-item">
                             <a href="{{path('admin_category_index')}}" class="nav-link {{'category' in app.request.attributes.get("_route") ? 'text-danger'}}">Catégorie</a>
                         </li>
+                        {# <li class="nav-item">
+                            <a href="{{path('admin_user_index')}}" class="nav-link {{'user' in app.request.attributes.get("_route") ? 'text-danger'}}">Utilisateur</a>
+                        </li> #}
+                        {% if is_granted('ROLE_SUPER') %}
+                        <li class="nav-item">
+                            <a href="{{path('admin_user_index')}}" class="nav-link {{'user' in app.request.attributes.get("_route") ? 'text-danger'}}">Utilisateur</a>
+                        </li>
+                        {% endif %}
+                        
                     </ul>
                 </nav>
             </aside>
@@ -35,4 +49,10 @@
     </div>
  
  
+{% endblock %}
+
+{% block mainJs %}
+    {{ encore_entry_script_tags('admin')}}
+    {% block javascripts %}{% endblock %}
+     
 {% endblock %}

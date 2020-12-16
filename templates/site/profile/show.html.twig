@@ -1,0 +1,25 @@
+{% extends 'site/layout.html.twig' %}
+
+{% block title %}Mon compte{% endblock %}
+
+{% block content %}
+    {% include "utils/_flash.html.twig" %}
+
+    <h1>Mon compte</h1>
+    <p>Pseudo : {{ user.username }}</p>
+    <p>Email : {{ user.email }}</p>
+    <p>Inscrit le  : {{ user.registerAt | date('d-m-Y H:i:s') }}</p>
+
+    <div class="btn-group">
+        <a href="{{ path('profile_edit')}}" class="btn btn-primary">Modifier mon compte</a>
+        <a href="{{ path('profile_edit_password')}}" class="btn btn-info">Modifier mon mot de passe</a>
+    </div>
+
+    <form method="post" action="{{ path('profile_user_delete', {'id': user.id}) }}" onsubmit="return confirm('Voulez vous vraiment supprimer votre compte ?');">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button class="btn btn-danger">Supprimer</button>
+    </form>
+
+
+{% endblock %}

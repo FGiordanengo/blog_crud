@@ -1,0 +1,9 @@
+{{message}}
+
+{% if date is not null %}
+Demande de rendez-vous le {{ date | date('d-m-Y') }}
+{% endif %}
+
+--------
+
+{{name}}  -  {{mail}}

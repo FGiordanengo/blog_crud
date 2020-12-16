@@ -1,0 +1,99 @@
+{% extends "site/layout.html.twig" %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+    <h1>Page de contact</h1>
+
+    {% include "utils/_flash.html.twig" %}
+
+    {{form_start(form)}}
+        <div class="row">
+            <div class="col-lg-6">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="col-lg-6">
+                {{ form_row(form.email) }}
+            </div>
+        </div>
+        {{ form_row(form.object) }}
+        {% if form.date is defined %}
+        {{ form_row(form.date) }}
+        {% endif %}
+        
+        {{ form_row(form.message) }}
+        {{ form_row(form.rgpd) }}
+
+        
+        <button class="btn btn-primary">Envoyer</button>
+    {{form_end(form)}}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.querySelector("#contact_object").addEventListener('change', function() {
+            const field= this
+            const form = field.closest('form')
+            const target = '#' + field.getAttribute('id').replace('object', 'date')
+            let data = {}
+            data[field.getAttribute('name')] = field.value
+
+            ajax(form.action, 'POST', data).then(result => {
+                const formStart = result.indexOf('<form name="contact" method="post">')
+                const formEnd = result.indexOf('</form>')+7
+                const length = formEnd - formStart
+
+                let newForm = htmlToElement(result.substr(formStart, length))
+                let input = newForm.querySelector(target)
+
+                if(input) {
+                    const inputGroup = input.parentElement 
+                    inputGroup.querySelector('.invalid-feedback').remove()
+                    input.classList.remove('is-invalid')
+                    field.parentNode.insertAdjacentElement('afterend', inputGroup)
+                } else {
+                    let object = form.querySelector(target)
+                    if(object) object.parentElement.remove()
+                }
+                
+                console.log(newForm)
+                
+            }).catch(error => {
+                console.error(error)
+            })
+        })
+
+        const ajax = function (url, method, data) {
+            let params = typeof data == 'string' ? data : Object.keys(data).map(
+                function(k) {
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+                }
+            ).join('&')
+
+            return new Promise(function (resolve, reject) {
+                let request = new XMLHttpRequest()
+                request.open(method, url, true)
+                request.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+                request.onreadystatechange = function() {
+                    if (request.readyState === 4) {
+                        if (request.status === 200){
+                            resolve(request.response)
+                        } else {
+                            reject(request)
+                        }
+                    }
+                }
+                request.send(params)
+            })
+        }
+
+        const htmlToElement = function(html) {
+            let template = document.createElement('template')
+            html = html.trim()
+            template.innerHTML = html 
+            return template.content.firstChild
+        }
+    </script>
+    
+{% endblock %}

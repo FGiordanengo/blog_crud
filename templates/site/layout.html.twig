@@ -1,29 +1,64 @@
 {% extends "base.html.twig" %}
-
+{% block mainCss %}
+    {{ encore_entry_link_tags('app')}}
+    {% block stylesheets %}{% endblock %}
+ {% endblock %}
 {% block body %}
     
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="{{ path('site_index')}}">Blog</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('site_index')}}">Blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item {{ 'index' in app.request.attributes.get("_route") ? 'active' }}">
-                    <a class="nav-link" href="{{ path('site_index')}}" title="Page d'accueil">Accueil<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item {{ 'about' in app.request.attributes.get("_route") ? 'active' }}">
-                    <a class="nav-link" href="{{path('site_about') }}" title="A propos de ...">A propos</a>
-                </li>
-                <li class="nav-item {{ 'blog' in app.request.attributes.get("_route") ? 'active' }}">
-                    <a class="nav-link" href="{{path('site_blog') }}" title="Les actualités du blog">Blog</a>
-                </li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {{ 'index' in app.request.attributes.get("_route") ? 'active' }}">
+                        <a class="nav-link" href="{{ path('site_index')}}" title="Page d'accueil">Accueil<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item {{ 'about' in app.request.attributes.get("_route") ? 'active' }}">
+                        <a class="nav-link" href="{{path('site_about') }}" title="A propos de ...">A propos</a>
+                    </li>
+                    <li class="nav-item {{ 'blog' in app.request.attributes.get("_route") ? 'active' }}">
+                        <a class="nav-link" href="{{path('site_blog') }}" title="Les actualités du blog">Blog</a>
+                    </li>
+                    <li class="nav-item {{ 'contact' in app.request.attributes.get("_route") ? 'active' }}">
+                        <a class="nav-link" href="{{path('site_contact') }}" title="Formulaire de contact">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY')%}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ app.user.username }}</a>
+                            <div class="dropdown-menu">
+                                <a href="{{ path('profile_show')}}" class="dropdown-item" title="Mon compte">Mon compte</a>
+                                {% if is_granted('ROLE_ADMIN')%}
+                                    <a class="dropdown-item" href="{{ path('admin')}}" title="Administration">Administration</a>
+                                {% endif %}
+                                <a href="{{ path('app_logout')}}" class="dropdown-item" title="Se déconnecter">Déconnexion</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item {{ 'login' in app.request.attributes.get("_route") ? 'active' }}">
+                        <a class="nav-item" href="{{path('app_login') }}" title="Se connecter">Connexion</a>
+                        </li>
+                        <li class="nav-item {{ 'login' in app.request.attributes.get("_route") ? 'active' }}">
+                            <a class="nav-item" href="{{path('app_register') }}" title="S'inscrire'">Inscription</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
-    {% block content %}
-        
-    {% endblock %}
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
     
 {% endblock %}
+
+ {% block mainJs %}
+    {{ encore_entry_script_tags('app')}}
+    {% block javascripts %}{% endblock %}
+     
+ {% endblock %}

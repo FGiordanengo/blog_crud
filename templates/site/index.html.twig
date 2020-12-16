@@ -2,7 +2,23 @@
 
 {% block title %}Index{% endblock %}
 
+{% block stylesheets %}
+
+    {{ encore_entry_link_tags('slider') }}
+{% endblock %}
 {% block content %}
+
+    <div class="slider">
+        <img src="https://picsum.photos/id/480/800/300" alt="">
+        <img src="https://picsum.photos/id/484/800/300" alt="">
+        <img src="https://picsum.photos/id/485/800/300" alt="">
+        <img src="https://picsum.photos/id/488/800/300" alt="">
+    </div>
     <h1>Page d'accueil</h1>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('slider') }}
 
 {% endblock %}

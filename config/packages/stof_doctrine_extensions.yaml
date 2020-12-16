@@ -6,6 +6,7 @@ stof_doctrine_extensions:
         default:
             sluggable: true
             uploadable: true
+            timestampable: true
     uploadable:
         # Default file path: This is one of the three ways you can configure the path for the Uploadable extension
         default_file_path:       "%kernel.project_dir%/public/uploads"

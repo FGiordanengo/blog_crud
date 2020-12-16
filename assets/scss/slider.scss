@@ -1,0 +1,7 @@
+@import "~slick-carousel/slick/slick";
+@import "~slick-carousel/slick/slick-theme";
+
+.slick-prev::before,
+.slick-next::before {
+    color:#000;
+}

@@ -27,10 +27,12 @@
                 <td>{{ article.category.title }}</td>
                 <td>{{ article.content}}</td>
                 <td>{{ article.createdAt | date('d-m-Y') }}</td>
-                <td>{{ article.isActive ? 'Publié' : 'Brouillon' }}</td>
                 <td>
-                    <a href="{{ path('admin_article_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
-                    <a href="{{ path('admin_article_edit', {'id': article.id}) }}" class="btn btn-secondary">Modifier</a>
+                    <a href="{{ path('admin_article_toggle_status', {'id': article.id}) }}" class="js-switch">{{ article.isActive ? 'Publié' : 'Brouillon' }}</a>
+                </td>
+                <td>
+                    <a href="{{ path('admin_article_show', {'id': article.id}) }}" class="btn btn-primary">{{ icon('eye') }}</a>
+                    <a href="{{ path('admin_article_edit', {'id': article.id}) }}" class="btn btn-secondary">{{ icon('edit') }}</a>
                 </td>
             </tr>
         {% else %}

@@ -10,6 +10,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Stof\DoctrineExtensionsBundle\Uploadable\UploadableManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  
@@ -49,9 +50,7 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
  
         if($form->isSubmitted() && $form->isValid()) {
-            if(!$article->getId()) {
-                $article->setCreatedAt(new \DateTime());
-            }
+            
 
             if($article->getFile()) {
                 $uploadableManager->markEntityToUpload($article, $article->getFile());
@@ -101,4 +100,19 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute('admin_article_index');
     }
+
+    /**
+     * @Route("/toggle/{id}", name="toggle_status", methods={"PATCH"})
+     */
+    public function toggleStatut(Article $article, EntityManagerInterface $em): JsonResponse
+    {
+        $article->setIsActive(!$article->getIsActive());
+        $em->flush();
+
+        return new JsonResponse([
+            'value' => $article->getIsActive()
+        ], 200);
+    }
+
+
 }
